@@ -21,7 +21,7 @@ app.use(express.json());
  */
 
 app.get('/', (req, res) =>{
-   if(!req.user) return res.redirect('/');
+   if(!req.user) return res.redirect('/auth/apple');
    fs.readFile('./view/main.html', (error, data) =>{
     if(error){
         console.log(error);
@@ -33,7 +33,7 @@ app.get('/', (req, res) =>{
 });
 
 app.get('/login', (req, res) =>{
-    if(req.user) return res.redirect('/auth/apple');
+    if(req.user) return res.redirect('/');
     fs.readFile('./view/login.html', (error, data)=>{
         if (error) {
             console.log(error);
