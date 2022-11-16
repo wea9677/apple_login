@@ -1,0 +1,6 @@
+{
+    "client_id" : "app.netlify.applelogint" ,
+    "team_id" : "3L7RW74HCJ" ,
+    "redirect_uri" : "https://applelogint.herokuapp.com/auth/apple" ,
+    "key_id" : "N22NKH9NF3"
+}

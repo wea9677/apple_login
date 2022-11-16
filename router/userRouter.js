@@ -6,7 +6,7 @@ const authmiddleware = require('../middleware/authmiddleware')
 const router = express.Router();
 
 const {
-    googleCallback, appleSign
+    googleCallback, 
 } = require('../controller/usercontroller')
 
 
@@ -22,10 +22,10 @@ router.get('google/callback', googleCallback)
  * Apple-auth router
  */
 
-router.get('/apple/auth', appleSign)
+router.get('/apple', passport.authenticate('apple'))
 
 /**
  * User info
  */
 
-router.get('/me', authmiddleware, checkme);
+// router.get('/me', authmiddleware, checkme);
