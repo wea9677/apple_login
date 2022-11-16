@@ -3,25 +3,34 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 // const googlestrategy = require('');
+const session = require('express-session');
 const UserRouter = require('./router/userRouter');
 const app = express();
 dotenv.config();
 const passport = require('passport');
 const port = process.env.PORT
+
 /**
  * body parser
  */
 app.use(express.json());
 
 
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use(bodyParser.urlencoded({extended: true}));
 
 /**
  * Middleware
  */
+
+//  app.use(session('secret'));
+app.use(session({ 
+    secret: 'SECRET',
+    resave: true,
+    saveUninitialized: true
+  }));
+ app.use(passport.initialize());
+ app.use(passport.session());
 
 /**
  * Router

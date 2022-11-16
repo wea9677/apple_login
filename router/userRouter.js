@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
-const authmiddleware = require('../middleware/authmiddleware')
+
+// const authmiddleware = require('../middleware/authmiddleware')
 
 const router = express.Router();
 
