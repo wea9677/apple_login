@@ -5,11 +5,14 @@ const bodyParser = require('body-parser');
 // const googlestrategy = require('');
 const session = require('express-session');
 const UserRouter = require('./router/userRouter');
+const path = require('path');
 const app = express();
 dotenv.config();
 const passport = require('passport');
 const port = process.env.PORT
-
+const appleConfig = require('./config/config.json');
+const AppleAuth = require('apple-auth');
+const auth = new AppleAuth(appleConfig, path.join(__dirname, `./config${appleConfig.private_key_path}`));
 /**
  * body parser
  */
@@ -36,38 +39,32 @@ app.use(session({
  * Router
  */
 
-// app.get('/', (req, res) =>{
-//    if(!req.user) return res.redirect('/auth/apple');
-//    fs.readFile('./view/main.html', (error, data) =>{
-//     if(error){
-//         console.log(error);
-//         return res.sendStatus(500);
-//     }
-//     res.writeHead(200, {"Content-type": "text/html"});
-//     res.end(data);
-//    });
-// });
-
-// app.get('/auth/apple', (req, res) =>{
-//     if(req.user) return res.redirect('/');
-//     fs.readFile('./view/login.html', (error, data)=>{
-//         if (error) {
-//             console.log(error);
-//             return res.sendStatus(500);
-//         }
-//         res.writeHead(200, {"Content-type" : "text/html"});
-//         res.end(data);
-//     });
-    
-// });
-
-app.get("/", (req, res) => {
-    res.send("<a href=\"/login\">Sign in with Apple</a>");
+ app.get("/", (req, res) => {
+    console.log( Date().toString() + "GET /");
+    res.send(`<a href="${auth.loginURL()}">Sign in with Apple</a>`);
+    console.log('지나가나요')
 });
 
+app.get('/auth/apple', (req, res) =>{
+    if(req.user) return res.redirect('/');
+    fs.readFile('./view/login.html', (error, data)=>{
+        if (error) {
+            console.log(error);
+            return res.sendStatus(500);
+        }
+        res.writeHead(200, {"Content-type" : "text/html"});
+        res.end(data);
+    });
+    
+});
+
+// app.get("/", (req, res) => {
+//     res.send("<a href=\"/login\">Sign in with Apple</a>");
+// });
 
 
-// app.use('/auth', express.urlencoded({ extended: false }), UserRouter)
+
+app.use('/auth', express.urlencoded({ extended: false }), UserRouter)
 
 
 

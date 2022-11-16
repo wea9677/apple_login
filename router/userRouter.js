@@ -7,7 +7,7 @@ const passport = require('passport');
 const router = express.Router();
 
 const {
-    googleCallback, 
+    googleCallback, appleCallback
 } = require('../controller/usercontroller')
 
 
@@ -16,7 +16,7 @@ const {
  */
 router.get('/google', passport.authenticate('google'));
 
-router.get('google/callback', googleCallback)
+router.get('/google/callback', googleCallback)
 
 
 /**
@@ -25,8 +25,13 @@ router.get('google/callback', googleCallback)
 
 router.get('/apple', passport.authenticate('apple'))
 
+router.get('/apple/callback', appleCallback)
+
 /**
  * User info
  */
 
 // router.get('/me', authmiddleware, checkme);
+
+
+module.exports = router;
