@@ -32,7 +32,7 @@ app.get('/', (req, res) =>{
    });
 });
 
-app.get('/login', (req, res) =>{
+app.get('/auth/apple', (req, res) =>{
     if(req.user) return res.redirect('/');
     fs.readFile('./view/login.html', (error, data)=>{
         if (error) {
