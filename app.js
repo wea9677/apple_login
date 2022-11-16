@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const fs = require('fs');
 // const googlestrategy = require('');
+const userRouter = require('./router/userRouter');
 const app = express()
 dotenv.config();
 
@@ -46,7 +47,7 @@ app.get('/auth/apple', (req, res) =>{
 });
 
 
-
+app.use('/auth/apple', userRouter);
 
 
 
