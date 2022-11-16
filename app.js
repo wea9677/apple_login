@@ -21,7 +21,7 @@ app.use(express.json());
  */
 
 app.get('/', (req, res) =>{
-   if(!req.user) return res.redirect('/login');
+   if(!req.user) return res.redirect('/auth/apple');
    fs.readFile('./view/main.html', (error, data) =>{
     if(error){
         console.log(error);
