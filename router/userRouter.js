@@ -14,18 +14,18 @@ const {
 /**
  * Google passport router
  */
-router.get('/google', passport.authenticate('google'));
+// router.get('/google', passport.authenticate('google'));
 
-router.get('/google/callback', googleCallback)
+// router.get('/google/callback', googleCallback)
 
 
 /**
  * Apple-auth router
  */
 
-router.get('/apple', passport.authenticate('apple'))
+router.get('/login', passport.authenticate('apple'))
 
-router.get('/apple/callback', appleCallback)
+router.post('/auth', appleCallback)
 
 /**
  * User info

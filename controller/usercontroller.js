@@ -47,7 +47,7 @@ const googleCallback = (req, res, next) =>{
           { failureRedirect: "/" },
           (err, user, info) => {
             if (err) return next(err);
-    
+            console.log("지나가나요")
             // const { userImageURL } = images;
             const { email } = user;
             const token = jwt.sign({ email }, process.env.MY_KEY, {

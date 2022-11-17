@@ -11,14 +11,16 @@ module.exports = () => {
     passport.use(
         new AppleStrategy(
         {
-            clientID: APPLE_SERVICE_ID,
-            callbackURL: 'https://www.example.net/auth/apple',
-            teamId: APPLE_TEAM_ID,
-            keyIdentifier: 'RB1233456',
+            clientID: 'com.herokuapp.applelogintest',
+            callbackURL: 'https://applelogint.herokuapp.com/',
+            teamId: '3L7RW74HCJ',
+            keyIdentifier: '874WAUN372',
             privateKeyPath: path.join(__dirname, process.env.APPLE_KEY_PATH)
       }, 
+      
       async (accessToken, refreshToken, profile, done)=>{
-        console.log('apple profile', profile);
+        console.log("지나가나요????");
+        console.log('apple profile', profile, accessToken, refreshToken);
         try {
             const exUser = await user.findOne({
                 where:{email:profile.id, provider:'apple'},
