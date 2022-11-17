@@ -15,25 +15,19 @@ module.exports = () => {
             callbackURL: 'https://applelogint.herokuapp.com/',
             teamId: '3L7RW74HCJ',
             keyIdentifier: '874WAUN372',
-            privateKeyPath: path.join(__dirname, process.env.APPLE_KEY_PATH)
+            privateKeyPath: path.join(__dirname, process.env.APPLE_KEY_PATH),
+            passReqToCallback: true
       }, 
       
-      async (accessToken, refreshToken, profile, done)=>{
+      async (req, accessToken, refreshToken, profile, idToken, __ , cb) =>{
         console.log("지나가나요????");
-        console.log('apple profile', profile, accessToken, refreshToken);
+        console.log('apple profile', profile, accessToken, refreshToken,idToken,cb);
         try {
-            const exUser = await user.findOne({
-                where:{email:profile.id, provider:'apple'},
-            });
-
-            if(exUser) {
-                done(null, exUser);
-            } else {
-                const newUser = await user.create({
-                    email : profile.email[0].value
-                });
-                done(null, newUser);
-            }
+            if (req.body && req.body.user) {
+                // Register your user here!
+          console.log(req.body.user);
+      }
+          cb(null, idToken);
         } catch (error) {
             console.error(error);
             done(error);
