@@ -34,7 +34,12 @@ passport.use(new AppleStrategy({
         teamID: "3L7RW74HCJ",
         callbackURL: "https://applelogint.herokuapp.com/",
         keyID: "874WAUN372",
-        privateKeyLocation: "./config/AuthKey_874WAUN372.p8"
+        privateKeyLocation: `-----BEGIN PRIVATE KEY-----
+        MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgC8dUt+CSkb80sHmj
+        NwoiiwOlyoQ7g01O/PhwhCg3ycagCgYIKoZIzj0DAQehRANCAASvpgFDPpHzpkuh
+        4wEz81MHdG47d8UD817LGd5GKKGZSTsHxP6cUrnRnKZ50dqabyWGkvWFPZ83gWbU
+        vj87gdLB
+        -----END PRIVATE KEY-----`
     }, async function(req, accessToken, refreshToken, idToken, profile , cb) {
         console.log(req, accessToken, refreshToken, idToken, profile , cb )
         // Here, check if the idToken.sub exists in your database!
@@ -47,6 +52,7 @@ passport.use(new AppleStrategy({
         const newUser = await user.create({
             email : idToken
         })
+        console.log(newUser, '새로운 유저')
     }
     	cb(null, idToken);
         console.log(newUser, '새로운 유저')
