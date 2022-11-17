@@ -25,7 +25,7 @@ passport.use(
             vj87gdLB
             -----END PRIVATE KEY-----`,
             // key: fs.readFileSync(path.join(__dirname, './config/AuthKey_874WAUN372.p8')),
-            callbackURL: 'https://applelogint.herokuapp.com/',
+            callbackURL: 'https://applelogint.herokuapp.com/auth/apple',
             scope: ['name', 'email']
         },
         (accessToken, refreshToken, profile, done) => {
@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/auth/apple', passport.authenticate('apple'));
-app.post('/', express.urlencoded({ extended: false }),
+app.post('/auth/apple', express.urlencoded({ extended: false }),
     passport.authenticate('apple'),
     
     (req, res) => {
