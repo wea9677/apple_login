@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/auth/apple', passport.authenticate('apple'));
-app.post('/auth/apple/callback', express.urlencoded({ extended: false }),
+app.post('/', express.urlencoded({ extended: false }),
     passport.authenticate('apple'),
     
     (req, res) => {
