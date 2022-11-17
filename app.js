@@ -62,6 +62,7 @@ console.log('11')
 app.post("/auth", function(req, res, next) {
 	passport.authenticate('apple', function(err, user, info) {
 		console.log('passport callback point')
+        console.log(request_id)
         if (err) {
 			if (err == "AuthorizationError") {
 				res.send("Oops! Looks like you didn't allow the app to proceed. Please sign in again! <br /> \
@@ -81,7 +82,7 @@ app.post("/auth", function(req, res, next) {
 			} else {
 				res.json(user);
 			}		
-            console.log(user)	
+            console.log(request_id)	
 		}
 	})(req, res, next);
 });
