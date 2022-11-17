@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const port = 3000
+// const port = 3000
+const http = require('http');
 const bodyParser = require('body-parser');
 // const config = require('./config/config.json');
 
@@ -23,17 +24,18 @@ const config = {
 }
 
 const queryString = Object.entries(config).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
-console.log(queryString,'쿼리스트링')
+// console.log(queryString,'쿼리스트링')
 // showLog()
 app.get("/", (req, res) => {
     
     res.send(`<a href = https://appleid.apple.com/auth/authorize?${queryString}>Sign in with Apple</a>`);
-    console.log(queryString)
+    // console.log(queryString)/
     
 });
 
 
 
-const server = app.listen(port, () =>{
-    console.log(port,"번 포트에서 실행")
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`App is running on port ${ PORT }`);
 });
