@@ -86,6 +86,7 @@ app.post("/auth", function(req, res, next) {
 	})(req, res, next);
 });
 
-app.listen(4000, () => {
-	console.log("Server started on https://passport-apple.ananay.dev");
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`App is running on port ${ PORT }`);
 });
