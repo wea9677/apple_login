@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 const config = {
     client_id : "com.herokuapp.applelogintest",
-    redirect_url : "https://applelogint.herokuapp.com/",
+    redirect_url : "https://applelogint.herokuapp.com/auth/apple",
     response_type: "code id_token",
     state : "origin:web",
     scope : "name email",
