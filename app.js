@@ -18,7 +18,13 @@ passport.use(
             clientID: 'com.herokuapp.applelogintest',
             teamID: '3L7RW74HCJ',
             keyID: '874WAUN372',
-            key: fs.readFileSync(path.join(__dirname, './config/AuthKey_874WAUN372.p8')),
+            privateKeyString : `-----BEGIN PRIVATE KEY-----
+            MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgC8dUt+CSkb80sHmj
+            NwoiiwOlyoQ7g01O/PhwhCg3ycagCgYIKoZIzj0DAQehRANCAASvpgFDPpHzpkuh
+            4wEz81MHdG47d8UD817LGd5GKKGZSTsHxP6cUrnRnKZ50dqabyWGkvWFPZ83gWbU
+            vj87gdLB
+            -----END PRIVATE KEY-----`,
+            // key: fs.readFileSync(path.join(__dirname, './config/AuthKey_874WAUN372.p8')),
             callbackURL: 'https://applelogint.herokuapp.com/',
             scope: ['name', 'email']
         },
@@ -56,6 +62,7 @@ app.post('/', express.urlencoded({ extended: false }),
     
     (req, res) => {
         res.json(req.user);
+        console.log(req.user, '제발 나와라')
     }
 );
 
