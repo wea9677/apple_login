@@ -43,7 +43,7 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
             user.name = name;
         }
         
-        console.log(name, 'name 인데')
+        // console.log(name, 'name 인데')
         console.log(user.name, 'user.name');
         console.log('지나가나?')
         res.json(user);
@@ -63,8 +63,8 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
         
 
 
-    } catch (ex) {
-        console.error(ex);
+    } catch (error) {
+        console.error();
         res.send("An error occurred!");
     }
 });
