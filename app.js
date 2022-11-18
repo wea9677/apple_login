@@ -38,14 +38,14 @@ passport.use(
     new AppleStrategy(
         {
             clientID: 'com.herokuapp.applelogin',
-            teamID: '3L7RW74HCJ',
+            teamID: '3L7RW74HCJ', 
             keyID: 'AGNLP55NBT',
-            // privateKeyString : `-----BEGIN PRIVATE KEY-----
-            // MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgwI65IK8xMkJ2gOMV
-            // EoMBjFzlslUrIb7CCh/yg1dcTgigCgYIKoZIzj0DAQehRANCAASuAP+Ni4skreFO
-            // zHyy68NkyHXptZes/ckRp9pAV8W5QJtIp3uJ5AsVynXpDbTJjl8NslI49Syi73p3
-            // hJXQvUN+
-            // -----END PRIVATE KEY-----`,
+            privateKeyString : `-----BEGIN PRIVATE KEY-----
+            MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgwI65IK8xMkJ2gOMV
+            EoMBjFzlslUrIb7CCh/yg1dcTgigCgYIKoZIzj0DAQehRANCAASuAP+Ni4skreFO
+            zHyy68NkyHXptZes/ckRp9pAV8W5QJtIp3uJ5AsVynXpDbTJjl8NslI49Syi73p3
+            hJXQvUN+
+            -----END PRIVATE KEY-----`,
             // privateKeyLocation: fs.readFileSync(path.join(__dirname,'./config/AuthKey_AGNLP55NBT.p8')),
             passReqToCallback: true,
             callbackURL: 'https://applelogint.herokuapp.com/auth/apple',
