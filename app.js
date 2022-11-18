@@ -26,13 +26,14 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
 
         const user = {};
         user.id = idToken.sub;
-
+        console.log('토큰 가져오나?')
+        console.log(idToken.sub)
         if (idToken.email) user.email = idToken.email;
         if (req.body.user) {
             const { name } = JSON.parse(req.body.user);
             user.name = name;
         }
-
+        console.log('지나가나?')
         res.json(user);
     } catch (ex) {
         console.error(ex);
