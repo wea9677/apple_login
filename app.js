@@ -30,62 +30,65 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
     try {
         console.log( Date().toString() + "GET /auth");
         const response = await auth.accessToken(req.body.code);
+        console.log(response, 'accessToken?')
         const idToken = jwt.decode(response.id_token);
        
-        // 처음 로그인 = 회원 가입
-           if (req.body.user) {
-            const user = {};
-            user.id = idToken.sub;
-            user.email = idToken.email;
+       
+        const user = {};
+        console.log(idToken, '아이디 토큰')
+        user.id = idToken.sub;
+        console.log('토큰 가져오나?')
+        console.log(idToken.sub, '아이디 토큰 sub')
+        if (idToken.email) user.email = idToken.email;
+        if (req.body.user) {
             const { name } = JSON.parse(req.body.user);
-            user.name = name; // name = { firstname: , lastname: }
-            const username = name.lastname + name.firstname;
-            return await UserDao.appleSign(user.id, username, user.email);
-        } else {
-            // 회원 가입 되어있음
-            // idToken.sub 으로 회원 가입되어있는지 체크. 그래서 로그인 시킬지 말지 결정.
-            return { accessToken: 'testtoken', refreshToken: 'testRefresh' };
+            user.name = name;
         }
-    } catch (err) {
-        throw new Error(500, err);
-    }
-});
-        // const user = {};
-        // console.log(idToken, '아이디 토큰')
-        // user.id = idToken.sub;
-        // console.log('토큰 가져오나?')
-        // console.log(idToken.sub, '아이디 토큰 sub')
-        // if (idToken.email) user.email = idToken.email;
-        // if (req.body.user) {
-        //     const { name } = JSON.parse(req.body.user);
-        //     user.name = name;
+        
+        // console.log(name, 'name 인데')
+        console.log(user.name, 'user.name');
+        console.log('지나가나?')
+        console.log(user, '유저 정보')
+        res.json(user);
+        // const exUser = await user.findOne({})
+        // if (exUser) {
+        //     done(null, exUser);
+        // } else {
+        //     // 데이터가 없다면
+        //     const newUser = await user.create({
+        //         appleId : id,
+        //         email : email
+        //     });
+        //     console.log(newUser, '이미지');
+        //           done(null, newUser);
         // }
         
-        // // console.log(name, 'name 인데')
-        // console.log(user.name, 'user.name');
-        // console.log('지나가나?')
-        // console.log(user, '유저 정보')
-        // res.json(user);
-        // // const exUser = await user.findOne({})
-        // // if (exUser) {
-        // //     done(null, exUser);
-        // // } else {
-        // //     // 데이터가 없다면
-        // //     const newUser = await user.create({
-        // //         appleId : id,
-        // //         email : email
-        // //     });
-        // //     console.log(newUser, '이미지');
-        // //           done(null, newUser);
-        // // }
-        
 
-
-//     } catch (error) {
-//         console.error();
-//         res.send("An error occurred!");
+//          // 처음 로그인 = 회원 가입
+//          if (req.body.user) {
+//             const user = {};
+//             user.id = idToken.sub;
+//             user.email = idToken.email;
+//             const { name } = JSON.parse(req.body.user);
+//             user.name = name; // name = { firstname: , lastname: }
+//             const username = name.lastname + name.firstname;
+//             return await UserDao.appleSign(user.id, username, user.email);
+//         } else {
+//             // 회원 가입 되어있음
+//             // idToken.sub 으로 회원 가입되어있는지 체크. 그래서 로그인 시킬지 말지 결정.
+//             return { accessToken: 'testtoken', refreshToken: 'testRefresh' };
+//         }
+//     } catch (err) {
+//         throw new Error(500, err);
 //     }
 // });
+
+
+    } catch (error) {
+        console.error();
+        res.send("An error occurred!");
+    }
+});
 
 app.get('/refresh', async (req, res) => {
     try {
