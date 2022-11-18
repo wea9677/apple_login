@@ -9,6 +9,14 @@ const AppleStrategy = require('passport-apple').Strategy;
 const cors = require('cors');
 const app = express();
 
+app.use(
+    session({
+        resave: false,
+        saveUninitialized: false,
+        secret: 'keyboard cat'
+    })
+);
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -56,13 +64,7 @@ passport.use(
 
 
 app.use(cors());
-app.use(
-    session({
-        resave: false,
-        saveUninitialized: false,
-        secret: 'keyboard cat'
-    })
-);
+
 
 
 app.get('/', (req, res) => {
