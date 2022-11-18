@@ -33,31 +33,33 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
         const idToken = jwt.decode(response.id_token);
 
         const user = {};
+        console.log(idToken, '아이디 토큰')
         user.id = idToken.sub;
         console.log('토큰 가져오나?')
-        console.log(idToken.sub)
+        console.log(idToken.sub, '아이디 토큰 sub')
         if (idToken.email) user.email = idToken.email;
         if (req.body.user) {
             const { name } = JSON.parse(req.body.user);
             user.name = name;
         }
-        console.log(user.name);
+        
+        console.log(name, 'name 인데')
+        console.log(user.name, 'user.name');
         console.log('지나가나?')
         res.json(user);
-        const exUser = await user.findOne({
-            where : {appleId : id},
-        })
-        if (exUser) {
-            done(null, exUser);
-        } else {
-            // 데이터가 없다면
-            const newUser = await user.create({
-                appleId : id,
-                email : email
-            });
-            console.log(newUser, '이미지');
-                  done(null, newUser);
-        }
+        console.log(json(user), 'json user')
+        // const exUser = await user.findOne({})
+        // if (exUser) {
+        //     done(null, exUser);
+        // } else {
+        //     // 데이터가 없다면
+        //     const newUser = await user.create({
+        //         appleId : id,
+        //         email : email
+        //     });
+        //     console.log(newUser, '이미지');
+        //           done(null, newUser);
+        // }
         
 
 
