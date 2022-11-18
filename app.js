@@ -46,8 +46,8 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
         // console.log(name, 'name 인데')
         console.log(user.name, 'user.name');
         console.log('지나가나?')
+        console.log(user, '유저 정보')
         res.json(user);
-        console.log(json(user), 'json user')
         // const exUser = await user.findOne({})
         // if (exUser) {
         //     done(null, exUser);
