@@ -10,7 +10,7 @@ const AppleStrategy = require('passport-apple').Strategy;
 
 console.log('어디에있니')
 console.log(path.parse( 'AuthKey_874WAUN372.p8', ));
-console.log(path.join(__dirname, './config/AuthKey_874WAUN372.p8'));
+// console.log(path.join(__dirname, './config/AuthKey_874WAUN372.p8'));
 passport.use(
     'apple',
     new AppleStrategy(
@@ -64,7 +64,7 @@ app.get("/login", passport.authenticate('apple'), (req, res) =>{
     
 });
 
-app.post("/auth", function(req, res, next) {
+app.post("/auth/apple", function(req, res, next) {
 	passport.authenticate('apple', function(err, user, info)  {
 		if (err) {
 			if (err == "AuthorizationError") {
