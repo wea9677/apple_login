@@ -1,3 +1,5 @@
+require("dotenv").config();
+const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
@@ -52,8 +54,9 @@ passport.use(
             
         },
         
-        function(req, accessToken, refreshToken, idToken, profile , cb) {
-        console.log(req, accessToken, refreshToken, idToken, profile , cb)
+        async (req, accessToken, refreshToken, idToken, profile , cb)=>{
+            process.nextTick(() =>cb(null, decodeIdToken));
+            console.log(req, accessToken, refreshToken, idToken, profile , cb)
             if (req.body && req.body.user) {
                 // Register your user here!
           console.log(req.body.user);
