@@ -1,12 +1,26 @@
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser')
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const AppleStrategy = require('passport-apple').Strategy;
 const cors = require('cors');
 const app = express();
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+passport.serializeUser(function(user, cb) {
+    cb(null, user);
+});
+
+passport.deserializeUser(function(obj, cb) {
+    cb(null, obj);
+});
 
 // console.log('어디에있니')
 // console.log(path.parse( 'AuthKey_874WAUN372.p8', ));
@@ -50,11 +64,6 @@ app.use(
     })
 );
 
-passport.serializeUser((user, callback) => callback(null, user));
-
-passport.deserializeUser((user, callback) => callback(null, user));
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.get('/', (req, res) => {
     res.send('<a href="/login">Sign in with Apple</a>');
