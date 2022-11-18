@@ -1,10 +1,18 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const mongoose = require('mongoose');
 const config = fs.readFileSync('./config/config.json');
 const AppleAuth = require('apple-auth');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+
+
+
+mongoose.connect('mongodb+srv://wea9677:tmxkdlfl@cluster0.xmzro.mongodb.net/applelogintest'), {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}
 
 let auth = new AppleAuth(config, fs.readFileSync('./config/AuthKey_AGNLP55NBT.p8').toString(), 'text');
 
@@ -33,8 +41,26 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
             const { name } = JSON.parse(req.body.user);
             user.name = name;
         }
+        console.log(user.name);
         console.log('지나가나?')
         res.json(user);
+        const exUser = await user.findOne({
+            where : {appleId : id},
+        })
+        if (exUser) {
+            done(null, exUser);
+        } else {
+            // 데이터가 없다면
+            const newUser = await user.create({
+                appleId : id,
+                email : email
+            });
+            console.log(newUser, '이미지');
+                  done(null, newUser);
+        }
+        
+
+
     } catch (ex) {
         console.error(ex);
         res.send("An error occurred!");
