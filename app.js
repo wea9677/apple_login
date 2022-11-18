@@ -51,13 +51,14 @@ passport.use(
             callbackURL: 'https://applelogint.herokuapp.com/auth/apple',
             
         },
-        (accessToken, refreshToken, profile, done) => {
-            // const {id, name: { firstName, lastName }, email} = profile;
-            console.log(accessToken, refreshToken, profile, done)
-            // Create or update the local user here.
-            // Note: name and email are only submitted on the first login!
-
-            done(null, {id, email, name: { firstName, lastName }});
+        
+        function(req, accessToken, refreshToken, idToken, profile , cb) {
+        console.log(req, accessToken, refreshToken, idToken, profile , cb)
+            if (req.body && req.body.user) {
+                // Register your user here!
+          console.log(req.body.user);
+      }
+          cb(null, idToken);
         }
     )
 );
@@ -77,7 +78,8 @@ app.get("/login", passport.authenticate('apple'), (req, res) =>{
 
 app.post("/auth/apple", function(req, res, next) {
 	passport.authenticate('apple', function(err, user, info)  {
-		if (err) {
+		console.log('통과하나 auth 콜백 포인트');
+        if (err) {
 			if (err == "AuthorizationError") {
                 console.log('auth')
 				res.send("Oops! Looks like you didn't allow the app to proceed. Please sign in again! <br /> \
@@ -98,6 +100,7 @@ app.post("/auth/apple", function(req, res, next) {
 				});
 			} else {
 				res.json(user);
+                console.log('여기로 바로 떨어진건가?')
 			}			
 		}
 	})(req, res, next);
