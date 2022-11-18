@@ -5,26 +5,26 @@ const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const AppleStrategy = require('passport-apple').Strategy;
+const cors = require('cors');
+const app = express();
 
-
-
-console.log('어디에있니')
-console.log(path.parse( 'AuthKey_874WAUN372.p8', ));
+// console.log('어디에있니')
+// console.log(path.parse( 'AuthKey_874WAUN372.p8', ));
 // console.log(path.join(__dirname, './config/AuthKey_874WAUN372.p8'));
 passport.use(
     'apple',
     new AppleStrategy(
         {
-            clientID: 'com.herokuapp.applelogintest',
+            clientID: 'com.herokuapp.applelogin',
             teamID: '3L7RW74HCJ',
-            keyID: '874WAUN372',
-            privateKeyString : `-----BEGIN PRIVATE KEY-----
-            MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgfOoI7eD25KhiRdka
-            GuYi5V5/T2tZsnhqruMDt0yQGiigCgYIKoZIzj0DAQehRANCAATTXQg6bBKInbae
-            0XfIbj8O5Ku36YY4nd9pYEmnrmbTXrwxZRASX6iXGcNaG1dv1hsbG8AiEigLdd2m
-            TkjZZ8zf
-            -----END PRIVATE KEY-----`,
-            // privateKeyLocation: path.join(__dirname, './config/AuthKey_874WAUN372.p8'),
+            keyID: 'AGNLP55NBT',
+            // privateKeyString : `-----BEGIN PRIVATE KEY-----
+            // MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgwI65IK8xMkJ2gOMV
+            // EoMBjFzlslUrIb7CCh/yg1dcTgigCgYIKoZIzj0DAQehRANCAASuAP+Ni4skreFO
+            // zHyy68NkyHXptZes/ckRp9pAV8W5QJtIp3uJ5AsVynXpDbTJjl8NslI49Syi73p3
+            // hJXQvUN+
+            // -----END PRIVATE KEY-----`,
+            privateKeyLocation: fs.readFileSync(path.join(__dirname,'./config/AuthKey_AGNLP55NBT.p8')),
             passReqToCallback: true,
             callbackURL: 'https://applelogint.herokuapp.com/auth/apple',
             
@@ -40,8 +40,8 @@ passport.use(
     )
 );
 
-const app = express();
 
+app.use(cors());
 app.use(
     session({
         resave: false,
@@ -68,9 +68,11 @@ app.post("/auth/apple", function(req, res, next) {
 	passport.authenticate('apple', function(err, user, info)  {
 		if (err) {
 			if (err == "AuthorizationError") {
+                console.log('auth')
 				res.send("Oops! Looks like you didn't allow the app to proceed. Please sign in again! <br /> \
 				<a href=\"/login\">Sign in with Apple</a>");
 			} else if (err == "TokenError") {
+                console.log('token')
 				res.send("Oops! Couldn't get a valid token from Apple's servers! <br /> \
 				<a href=\"/login\">Sign in with Apple</a>");
 			} else {
