@@ -1,16 +1,16 @@
 const fs = require('fs');
 const path = require('path');
-
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
-const errorHandler = require('errorhandler');
 const AppleStrategy = require('passport-apple').Strategy;
 
-passport.serializeUser((user, callback) => callback(null, user));
 
-passport.deserializeUser((user, callback) => callback(null, user));
 
+console.log('어디에있니')
+console.log(path.parse( 'AuthKey_874WAUN372.p8', ));
+console.log(path.join(__dirname, './config/AuthKey_874WAUN372.p8'));
 passport.use(
     'apple',
     new AppleStrategy(
@@ -19,17 +19,18 @@ passport.use(
             teamID: '3L7RW74HCJ',
             keyID: '874WAUN372',
             privateKeyString : `-----BEGIN PRIVATE KEY-----
-            MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgC8dUt+CSkb80sHmj
-            NwoiiwOlyoQ7g01O/PhwhCg3ycagCgYIKoZIzj0DAQehRANCAASvpgFDPpHzpkuh
-            4wEz81MHdG47d8UD817LGd5GKKGZSTsHxP6cUrnRnKZ50dqabyWGkvWFPZ83gWbU
-            vj87gdLB
+            MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgfOoI7eD25KhiRdka
+            GuYi5V5/T2tZsnhqruMDt0yQGiigCgYIKoZIzj0DAQehRANCAATTXQg6bBKInbae
+            0XfIbj8O5Ku36YY4nd9pYEmnrmbTXrwxZRASX6iXGcNaG1dv1hsbG8AiEigLdd2m
+            TkjZZ8zf
             -----END PRIVATE KEY-----`,
-            // key: fs.readFileSync(path.join(__dirname, './config/AuthKey_874WAUN372.p8')),
+            // privateKeyLocation: path.join(__dirname, './config/AuthKey_874WAUN372.p8'),
+            passReqToCallback: true,
             callbackURL: 'https://applelogint.herokuapp.com/auth/apple',
-            scope: ['name', 'email']
+            
         },
         (accessToken, refreshToken, profile, done) => {
-            const {id, name: { firstName, lastName }, email} = profile;
+            // const {id, name: { firstName, lastName }, email} = profile;
             console.log(accessToken, refreshToken, profile, done)
             // Create or update the local user here.
             // Note: name and email are only submitted on the first login!
@@ -41,7 +42,6 @@ passport.use(
 
 const app = express();
 
-app.set('port', process.env.PORT || 3000);
 app.use(
     session({
         resave: false,
@@ -49,24 +49,48 @@ app.use(
         secret: 'keyboard cat'
     })
 );
+
+passport.serializeUser((user, callback) => callback(null, user));
+
+passport.deserializeUser((user, callback) => callback(null, user));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', (req, res) => {
-    res.send('<a href="/auth/apple">Sign in with Apple</a>');
+    res.send('<a href="/login">Sign in with Apple</a>');
 });
 
-app.get('/auth/apple', passport.authenticate('apple'));
-app.post('/auth/apple', express.urlencoded({ extended: false }),
-    passport.authenticate('apple'),
+app.get("/login", passport.authenticate('apple'), (req, res) =>{
     
-    (req, res) => {
-        res.json(req.user);
-        console.log(req.user, '제발 나와라')
-    }
-);
+});
 
-app.use(errorHandler());
+app.post("/auth", function(req, res, next) {
+	passport.authenticate('apple', function(err, user, info)  {
+		if (err) {
+			if (err == "AuthorizationError") {
+				res.send("Oops! Looks like you didn't allow the app to proceed. Please sign in again! <br /> \
+				<a href=\"/login\">Sign in with Apple</a>");
+			} else if (err == "TokenError") {
+				res.send("Oops! Couldn't get a valid token from Apple's servers! <br /> \
+				<a href=\"/login\">Sign in with Apple</a>");
+			} else {
+				res.send(err);
+			}
+		} else {
+			if (req.body.user) {
+				// Get the profile info (name and email) if the person is registering
+				res.json({
+					user: req.body.user,
+					idToken: user
+				});
+			} else {
+				res.json(user);
+			}			
+		}
+	})(req, res, next);
+});
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
