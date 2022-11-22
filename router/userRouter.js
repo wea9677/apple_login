@@ -6,8 +6,7 @@ const passport = require('passport');
 
 const router = express.Router();
 
-const {
-    googleCallback, appleCallback
+const { appleCallback
 } = require('../controller/usercontroller')
 
 
