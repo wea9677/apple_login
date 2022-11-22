@@ -29,7 +29,7 @@ app.get('/token', (req, res) => {
 });
 
 app.post('/auth/apple', bodyParser(), async (req, res) => {
-    // try {
+    try {
     
         console.log( Date().toString() + "GET /auth");
         const response = await auth.accessToken(req.body.code);
@@ -38,31 +38,16 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
        
        
         const user = {};
-        // console.log(idToken, '아이디 토큰')
+        console.log(idToken, '아이디 토큰')
         user.id = idToken.sub;
         // console.log('토큰 가져오나?')
-        // console.log(idToken.sub, '아이디 토큰 sub')
+        console.log(idToken.sub, '아이디 토큰 sub')
         if (idToken.email) user.email = idToken.email;
+        console.log(user.email,"유저.emil");
+        console.log(idToken.email, "아이디 토큰 이메일")
         if (req.body.user) {
             const { name } = JSON.parse(req.body.user);
             user.name = name;
-        }
-        
-        const exUser = await User.findOne({
-            id:user.id
-        });
-        if (exUser) {
-            done(null, exUser);
-            console.log(exUser, "로그인 성공")
-        } else {
-            const newUser = await User.create({
-              appleId:user.id,
-              provider:'apple',
-              email : user.email
-            });
-            console.log(email, '이메일')
-            console.log(appleId, '에플 고유아이디 코드')
-            console.log(newUser,'신규회원');
         }
         // console.log(name, 'name 인데')
         console.log(user.name, 'user.name');
@@ -103,10 +88,10 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
 // });
 
 
-    // } catch (error) {
-    //     console.error();
-    //     res.send("An error occurred!");
-    // }
+    } catch (error) {
+        console.error();
+        res.send("An error occurred!");
+    }
 });
 
 app.get('/refresh', async (req, res) => {
