@@ -30,7 +30,7 @@ app.get('/token', (req, res) => {
 });
 
 app.post('/auth/apple', bodyParser(), async (req, res) => {
-    try {
+    // try {
     
         console.log( Date().toString() + "GET /auth");
         const response = await auth.accessToken(req.body.code);
@@ -103,10 +103,10 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
 // });
 
 
-    } catch (error) {
-        console.error();
-        res.send("An error occurred!");
-    }
+    // } catch (error) {
+    //     console.error();
+    //     res.send("An error occurred!");
+    // }
 });
 
 app.get('/refresh', async (req, res) => {
