@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const User = require('./model/user');
 const { doesNotMatch } = require('assert');
+const { findOne } = require('./model/user');
 
 
 
@@ -42,6 +43,20 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
         user.id = idToken.sub;
         // console.log('토큰 가져오나?')
         console.log(idToken.sub, '아이디 토큰 sub')
+        const exUser = await User.find({
+            appleId
+        });
+        console.log(appleId, '저장된 에플 id 코드')
+        if (exUser) { 
+            done(null, exUser);
+        }else {
+            const newUser = await User.create({
+                appleId:idToken.sub,
+                email : idToken.email,
+            
+            });
+            done(null, newUser);
+        }
         if (idToken.email) user.email = idToken.email;
         console.log(user.email,"유저.emil");
         console.log(idToken.email, "아이디 토큰 이메일")
