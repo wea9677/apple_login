@@ -9,6 +9,8 @@ const jwt = require('jsonwebtoken');
 const User = require('./model/user');
 const { doesNotMatch } = require('assert');
 const { findOne } = require('./model/user');
+const authmiddleware = require('./middleware/authmiddleware');
+const { userInfo } = require('os');
 
 
 
@@ -39,24 +41,10 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
        
        
         const user = {};
-        console.log(idToken, '아이디 토큰')
+        // console.log(idToken, '아이디 토큰')
         user.id = idToken.sub;
         // console.log('토큰 가져오나?')
-        console.log(idToken.sub, '아이디 토큰 sub')
-        const exUser = await User.find({
-            appleId
-        });
-        console.log(appleId, '저장된 에플 id 코드')
-        if (exUser) { 
-            done(null, exUser);
-        }else {
-            const newUser = await User.create({
-                appleId:idToken.sub,
-                email : idToken.email,
-            
-            });
-            done(null, newUser);
-        }
+        // console.log(idToken.sub, '아이디 토큰 sub')
         if (idToken.email) user.email = idToken.email;
         console.log(user.email,"유저.emil");
         console.log(idToken.email, "아이디 토큰 이메일")
@@ -69,6 +57,33 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
         console.log('지나가나?')
         console.log(user, '유저 정보')
         res.json(user);
+        const exUser = await User.find({
+            appleId : idToken.sub
+        });
+        console.log(appleId, '저장된 에플 id 코드')
+        if (exUser) { 
+            const {appleId, email} = user;
+            const token = jwt.sign({appleId}, process.env.MY_KEY, {
+                expiresIn:"24h",
+            });
+
+            result = {
+                appleId,
+                token,
+                email
+            };
+            res.send({user:result});
+            done(null, exUser);
+        }else {
+            const newUser = await User.create({
+                appleId:idToken.sub,
+                email : idToken.email,
+            
+            });
+            done(null, newUser);
+            console.log(newUser, '신규유저')
+        }
+    
         // const exUser = await user.findOne({})
         // if (exUser) {
         //     done(null, exUser);
@@ -108,6 +123,9 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
     //     res.send("An error occurred!");
     // }
 });
+
+app.get('/me', authmiddleware );
+
 
 app.get('/refresh', async (req, res) => {
     try {
