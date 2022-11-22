@@ -6,6 +6,7 @@ const config = fs.readFileSync('./config/config.json');
 const AppleAuth = require('apple-auth');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const { doesNotMatch } = require('assert');
 
 
 
@@ -28,6 +29,7 @@ app.get('/token', (req, res) => {
 
 app.post('/auth/apple', bodyParser(), async (req, res) => {
     try {
+    
         console.log( Date().toString() + "GET /auth");
         const response = await auth.accessToken(req.body.code);
         console.log(response, 'accessToken?')
@@ -45,6 +47,21 @@ app.post('/auth/apple', bodyParser(), async (req, res) => {
             user.name = name;
         }
         
+        const exUser = await user.findOne({
+            id:user.id
+        });
+        if (exUser) {
+            done(null, exUser);
+            console.log(exUser, "로그인 성공")
+        } else {
+            const newUser = await user.create({
+              appleId:user.id,
+              provider:'apple',
+              email : user.email
+            });
+
+            console.log(newUser,'신규회원');
+        }
         // console.log(name, 'name 인데')
         console.log(user.name, 'user.name');
         console.log('지나가나?')
